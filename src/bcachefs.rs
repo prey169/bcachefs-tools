@@ -1,10 +1,10 @@
 mod commands;
-mod key;
+mod device_scan;
 mod dump_stack;
+mod http;
+mod key;
 mod logging;
 mod wrappers;
-mod device_scan;
-mod http;
 
 use std::{
     ffi::{c_char, CString},
@@ -126,6 +126,10 @@ fn main() -> ExitCode {
         }
         "list" => commands::list(args[1..].to_vec()).report(),
         "mount" => commands::mount(args, symlink_cmd),
+        "top" => match commands::top::top(args) {
+            Ok(_) => ExitCode::SUCCESS,
+            Err(_) => ExitCode::FAILURE,
+        },
         "subvolume" => commands::subvolume(args[1..].to_vec()).report(),
         _ => {
             let r = handle_c_command(args, symlink_cmd);

@@ -4,11 +4,13 @@ pub mod completions;
 pub mod list;
 pub mod mount;
 pub mod subvolume;
+pub mod top;
 
 pub use completions::completions;
 pub use list::list;
 pub use mount::mount;
 pub use subvolume::subvolume;
+pub use top::top;
 
 #[derive(clap::Parser, Debug)]
 #[command(name = "bcachefs")]
