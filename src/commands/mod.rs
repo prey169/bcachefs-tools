@@ -1,11 +1,13 @@
 use clap::Subcommand;
 
 pub mod completions;
+pub mod json;
 pub mod list;
 pub mod mount;
 pub mod subvolume;
 
 pub use completions::completions;
+pub use json::json;
 pub use list::list;
 pub use mount::mount;
 pub use subvolume::subvolume;

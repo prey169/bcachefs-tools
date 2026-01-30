@@ -149,7 +149,7 @@ fn main() {
 // target arch. Regular conditional compilation won't work here since build scripts are always
 // compiled for the host arch, not the target arch, so that won't work when cross-compiling.
 fn packed_and_align_fix(bindings: std::string::String) -> std::string::String {
-    bindings
+    let mut s = bindings
         .replace(
             "#[repr(C, packed(8))]\npub struct btree_node {",
             "#[repr(C, align(8))]\npub struct btree_node {",
@@ -169,5 +169,13 @@ fn packed_and_align_fix(bindings: std::string::String) -> std::string::String {
         .replace(
             "#[repr(C, packed(8))]\npub struct bch_sb {",
             "#[repr(C, align(8))]\npub struct bch_sb {",
-        )
+        );
+    if s.contains("pub enum bch_persistent_counters_stable") {
+        s = s.replace(
+            "#[repr(u32)]\n#[non_exhaustive]\n#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]\npub enum bch_persistent_counters_stable {",
+            "#[repr(u32)]\n#[non_exhaustive]\n#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq, strum::EnumIter, strum::EnumCount)]\npub enum bch_persistent_counters_stable {",
+        );
+    }
+
+    s
 }
